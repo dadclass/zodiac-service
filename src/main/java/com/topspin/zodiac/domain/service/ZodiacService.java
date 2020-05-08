@@ -4,29 +4,23 @@ import java.time.LocalDate;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ZodiacService {
 	private static final Logger LOGGER=LoggerFactory.getLogger(ZodiacService.class);
 	
-	@Autowired
-	private DataTimeService dtSvc;
-	
-	public String getZodiacMascot(String strBirthMonth) {
-		LocalDate birthMonth = dtSvc.valueOf(strBirthMonth);
+	public String getZodiacMascot(LocalDate birthday) {
 		
-		String horoscopeSign = getHoroscopeSign(birthMonth);
-		
-		String chineseZodiac = getChineseZodiac(birthMonth);
+		String horoscopeSign = getHoroscopeSign(birthday);
+		String chineseZodiac = getChineseZodiac(birthday);
 		
 		return String.format("You're a %s %s", horoscopeSign, chineseZodiac);
 	}
 	
-	private String getHoroscopeSign(LocalDate birthMonth) {
-        int day = birthMonth.getDayOfMonth();
-        int month = birthMonth.getMonthValue();
+	private String getHoroscopeSign(LocalDate birthday) {
+        int day = birthday.getDayOfMonth();
+        int month = birthday.getMonthValue();
 
         if (month == 12 && day >= 22 || month == 1 && day < 20) {
             return "Capricorn";
@@ -56,8 +50,8 @@ public class ZodiacService {
         return "";
 	}
 	
-    private String getChineseZodiac(LocalDate birthMonth) {
-        int year = birthMonth.getYear();
+    private String getChineseZodiac(LocalDate birthday) {
+        int year = birthday.getYear();
         switch (year % 12) {
             case 0:
                 return "Monkey";
