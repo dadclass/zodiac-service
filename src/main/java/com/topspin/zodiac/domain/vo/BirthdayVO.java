@@ -7,6 +7,13 @@ public class BirthdayVO {
 	private String day;
 	private String month;
 	private String year;
+
+	public BirthdayVO(String day, String month, String year) {
+		super();
+		this.day = day;
+		this.month = month;
+		this.year = year;
+	}
 	
 	public String getDay() {
 		return day;
