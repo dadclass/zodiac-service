@@ -6,26 +6,30 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
+import com.topspin.zodiac.domain.vo.BirthdayVO;
+
 @Service
 public class ZodiacService {
 	private static final Logger LOGGER=LoggerFactory.getLogger(ZodiacService.class);
 	
-	public String getZodiacAnimal(LocalDate birthday) {
+	public String getZodiacAnimal(BirthdayVO vo) {
 		
-		String zodiacSign = getZodiacSign(birthday);
-		String chineseZodiac = getChineseZodiac(birthday);
+		String zodiacSign = getZodiacSign(vo);
+		String chineseZodiac = getChineseZodiac(vo);
 		
 		return String.format("You're a %s %s", zodiacSign, chineseZodiac);
 	}
 	
-	private String getZodiacSign(LocalDate birthday) {
+	protected String getZodiacSign(BirthdayVO vo) {
+		LocalDate birthday = vo.toLocalDate();
         int day = birthday.getDayOfMonth();
         int month = birthday.getMonthValue();
         
-        return "By date: " + findZodiacByDate(day, month) + "; By code: " + findZodiacByCode(day, month);
+        return findZodiacByDate(day, month);
+//        return findZodiacByCode(day, month);
 	}
-	
-	private String findZodiacByDate(int day, int month) {
+
+	protected String findZodiacByDate(int day, int month) {
         if (month == 12 && day >= 22 || month == 1 && day < 20) {
             return "Capricorn";
         } else if (month == 1 && day >= 20 || month == 2 && day < 19) {
@@ -53,8 +57,9 @@ public class ZodiacService {
         }
         return "";
 	}
-	
-	private String findZodiacByCode(int day, int month) {
+
+	/*
+	protected String findZodiacByCode(int day, int month) {
 		int zodiacCode = (month *100) + day;
 		
 		if (zodiacCode < 119) return "Capricorn";
@@ -72,13 +77,16 @@ public class ZodiacService {
 		if (zodiacCode > 1222) return "Capricorn";
 		return String.format("No zodiac code for %s", zodiacCode);
 	}
-	
-    private String getChineseZodiac(LocalDate birthday) {
+	*/
+
+	protected String getChineseZodiac(BirthdayVO vo) {
+		LocalDate birthday = vo.toLocalDate();
         int year = birthday.getYear();
-        return "By switch: " + findChineseZodiacBySwitch(year) + "; By array: " + findChineseZodiacByArray(year);
+        return findChineseZodiacBySwitch(year);
+//        return findChineseZodiacByArray(year);
     }
-    
-    private String findChineseZodiacBySwitch(int year) {
+
+	protected String findChineseZodiacBySwitch(int year) {
         switch (year % 12) {
         case 0:
             return "Monkey";
@@ -103,16 +111,18 @@ public class ZodiacService {
         case 10:
             return "Horse";
         case 11:
-            return "Sheep";
+            return "Goat";
         }
         return "";    	
     }
-    
-    private String findChineseZodiacByArray(int year) {
+
+	/*
+	protected String findChineseZodiacByArray(int year) {
     	String[] chineseZodiac = {
     		"Monkey", "Rooster", "Dog", "Pig", "Rat", "Ox",
-    		"Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Sheep"
+    		"Tiger", "Rabbit", "Dragon", "Snake", "Horse", "Goat"
     	};
     	return chineseZodiac[year % 12];
-    }
+	}
+	*/
 }
